@@ -27,20 +27,25 @@ protected:
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
+	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnBnClickedOther();
+	afx_msg void OnBnClickedCalculate();
 	void getForwardSalary(const double dSalary, double * salaryCount);
 	void getAfterwardSalary(const double dSalary, const double dInsurance, const double dDiscounts, double * salaryCount);
 	int getLevel(const double dSalary, bool bNew = false);
 	DECLARE_MESSAGE_MAP()
-public:
+
+private:
 	double m_taxRate[7];
 	__int64 m_oldMinus[7];
 	__int64 m_newMinus[7];
 
+	double m_dWXYJMoney = 0.0;
+	double m_dOtherMoney = 0.0;
+
 	CString m_strSalary;
-	CString m_strInsurance;
-	afx_msg void OnBnClickedCalculate();
 	CListCtrl m_listCtrl;
 };

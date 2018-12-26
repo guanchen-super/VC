@@ -181,6 +181,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdultEducation.h" />
+    <ClInclude Include="ChildrenEducation.h" />
+    <ClInclude Include="House.h" />
+    <ClInclude Include="Insurance.h" />
+    <ClInclude Include="OtherItem.h" />
+    <ClInclude Include="Parents.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SalaryCompare.h" />
     <ClInclude Include="SalaryCompareDlg.h" />
@@ -188,6 +194,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdultEducation.cpp" />
+    <ClCompile Include="ChildrenEducation.cpp" />
+    <ClCompile Include="House.cpp" />
+    <ClCompile Include="Insurance.cpp" />
+    <ClCompile Include="OtherItem.cpp" />
+    <ClCompile Include="Parents.cpp" />
     <ClCompile Include="SalaryCompare.cpp" />
     <ClCompile Include="SalaryCompareDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

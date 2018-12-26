@@ -11,6 +11,7 @@
 #define new DEBUG_NEW
 #endif
 
+#include "OtherItem.h"
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -52,7 +53,6 @@ END_MESSAGE_MAP()
 CSalaryCompareDlg::CSalaryCompareDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SALARYCOMPARE_DIALOG, pParent)
 	, m_strSalary(_T(""))
-	, m_strInsurance(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -62,8 +62,6 @@ void CSalaryCompareDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_SALARY, m_strSalary);
 	DDV_MaxChars(pDX, m_strSalary, 10);
-	DDX_Text(pDX, IDC_INSURANCE, m_strInsurance);
-	DDV_MaxChars(pDX, m_strInsurance, 10);
 	DDX_Control(pDX, IDC_LIST2, m_listCtrl);
 }
 
@@ -72,6 +70,7 @@ BEGIN_MESSAGE_MAP(CSalaryCompareDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_CALCULATE, &CSalaryCompareDlg::OnBnClickedCalculate)
+	ON_BN_CLICKED(IDC_OTHER, &CSalaryCompareDlg::OnBnClickedOther)
 END_MESSAGE_MAP()
 
 
@@ -107,16 +106,29 @@ BOOL CSalaryCompareDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// 设置表头
-	LONG styles;
-	styles = GetWindowLong(m_listCtrl.m_hWnd, GWL_STYLE);
-	SetWindowLong(m_listCtrl.m_hWnd, GWL_STYLE, styles | LVS_REPORT | LVS_EX_GRIDLINES);
+	m_listCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+
+	/*RECT rect;
+	m_listCtrl.GetWindowRect(&rect);
+	m_listCtrl.InsertColumn(0, _T("月份"), LVCFMT_LEFT, 50);
+	m_listCtrl.InsertColumn(1, _T("新税法前"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);
+	m_listCtrl.InsertColumn(2, _T("新税法后"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);
+	m_listCtrl.InsertColumn(3, _T("差额"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);*/
+
+	m_listCtrl.InsertColumn(0, _T("月份"), LVCFMT_LEFT, 50);
+	m_listCtrl.InsertColumn(1, _T("新税法前"), LVCFMT_LEFT);
+	m_listCtrl.InsertColumn(2, _T("新税法后"), LVCFMT_LEFT);
+	m_listCtrl.InsertColumn(3, _T("差额"), LVCFMT_LEFT);
+
+	CHeaderCtrl * pHeader = m_listCtrl.GetHeaderCtrl();
+	int nCount = pHeader->GetItemCount();
 
 	RECT rect;
 	m_listCtrl.GetWindowRect(&rect);
-	m_listCtrl.InsertColumn(0, _T("月份"), LVCFMT_LEFT, 50);
-	m_listCtrl.InsertColumn(1, _T("新税法前"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 2);
-	m_listCtrl.InsertColumn(2, _T("新税法后"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 2);
-
+	for (int i = 1; i != nCount; ++i)
+	{
+		m_listCtrl.SetColumnWidth(i, (rect.right - rect.left - 50)/3);
+	}
 
 	m_listCtrl.InsertItem(0, _T("一月"));
 	m_listCtrl.InsertItem(1, _T("二月"));
@@ -211,12 +223,13 @@ HCURSOR CSalaryCompareDlg::OnQueryDragIcon()
 
 void CSalaryCompareDlg::getForwardSalary(const double dSalary, double * salaryCount)
 {
-	int nLevel = getLevel(dSalary - 5000);
-	double nTemp = (dSalary - 5000) * m_taxRate[nLevel] - m_oldMinus[nLevel];
+	double tempSalary = dSalary - 5000 - m_dWXYJMoney;
+	int nLevel = getLevel(tempSalary);
+	double nTemp = tempSalary * m_taxRate[nLevel] - m_oldMinus[nLevel];
 	
 	for (int i = 0; i != 12; ++i)
 	{
-		salaryCount[i] = dSalary - nTemp;
+		salaryCount[i] = tempSalary - nTemp + 5000;
 		salaryCount[12] += salaryCount[i];
 	}
 }
@@ -229,8 +242,8 @@ void CSalaryCompareDlg::getAfterwardSalary(const double dSalary, const double dI
 
 	for (int i = 1; i != 13; ++i)
 	{
-		nTemp2 = dSalary - (5000 + dInsurance + dDiscounts) * i;
-		int nLevel = getLevel(nTemp2);
+		nTemp2 = dSalary * i - (5000 + dInsurance + dDiscounts) * i;
+		int nLevel = getLevel(nTemp2, true);
 		nTemp1 = nTemp2 * m_taxRate[nLevel] - m_newMinus[nLevel] - nTemp0;
 		salaryCount[i - 1] = dSalary - dInsurance - nTemp1;
 		salaryCount[12] += salaryCount[i - 1];
@@ -278,19 +291,24 @@ int CSalaryCompareDlg::getLevel(const double dSalary, bool bNew /*= false*/)
 	return nLevel;
 }
 
+void CSalaryCompareDlg::OnBnClickedOther()
+{
+	COtherItem otherItem;
+	otherItem.DoModal();
+
+	m_dWXYJMoney = otherItem.GetWXYIItemCount();
+	m_dOtherMoney = otherItem.GetOtherItemCount();
+}
 
 // 计算新税法
 void CSalaryCompareDlg::OnBnClickedCalculate()
 {
 	UpdateData();
-	__int64 nSalary = _ttoi64(m_strSalary) -  _ttoi64(m_strInsurance);
-	if (nSalary < 0)
-		return;
 
 	double arrOldSalaryCount[13] = { 0 };
-	getForwardSalary(nSalary, arrOldSalaryCount);
+	getForwardSalary(_ttoi64(m_strSalary), arrOldSalaryCount);
 	double arrNewSalaryCount[13] = { 0 };
-	getAfterwardSalary(_ttoi64(m_strSalary), _ttoi64(m_strInsurance), 0, arrNewSalaryCount);
+	getAfterwardSalary(_ttoi64(m_strSalary), m_dWXYJMoney, m_dOtherMoney, arrNewSalaryCount);
 
 	for (int i = 0; i != 13; ++i)
 	{
@@ -302,6 +320,26 @@ void CSalaryCompareDlg::OnBnClickedCalculate()
 		ZeroMemory(buf, 10);
 		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i]);
 		m_listCtrl.SetItemText(i, 2, buf);
+
+		ZeroMemory(buf, 10);
+		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i] - arrOldSalaryCount[i]);
+		m_listCtrl.SetItemText(i, 3, buf);
 	}
 
+	m_dWXYJMoney = 0.0;
+	m_dOtherMoney = 0.0;
+}
+
+BOOL CSalaryCompareDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	// 屏蔽两个消息通知码，使得禁止拖动List表头
+	NMHEADER* pNMHeader = (NMHEADER*)lParam;
+	if (((pNMHeader->hdr.code == HDN_BEGINTRACKW) |
+		(pNMHeader->hdr.code == HDN_DIVIDERDBLCLICKW)))
+	{
+		*pResult = TRUE;
+		return TRUE;
+	}
+
+	return CDialogEx::OnNotify(wParam, lParam, pResult);
 }

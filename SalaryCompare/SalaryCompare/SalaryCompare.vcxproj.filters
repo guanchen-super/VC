@@ -33,6 +33,24 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="OtherItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildrenEducation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="House.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Parents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AdultEducation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Insurance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SalaryCompare.cpp">
@@ -42,6 +60,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OtherItem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildrenEducation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="House.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Parents.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AdultEducation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Insurance.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
