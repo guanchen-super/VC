@@ -1,0 +1,11 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/SalaryCompare/Debug
+/SalaryCompare/.vs/SalaryCompare/v14
+/SalaryCompare/ipch/SALARYCOMPARE-59e8293f
+/SalaryCompare/SalaryCompare/Debug
+*.aps
+*.db
+*.opendb
