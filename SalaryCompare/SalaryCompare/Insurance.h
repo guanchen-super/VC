@@ -20,9 +20,15 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	virtual BOOL OnInitDialog();
+	virtual void OnOK();
+	virtual void OnCancel();
 	afx_msg void OnBnClickedRadio1();
 	afx_msg void OnBnClickedRadio2();
-
+	afx_msg void OnEnChangeEdit1();
+	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnEnKillfocusEdit3();
+	afx_msg void OnEnChangeEdit3();
+	afx_msg void OnEnChangeEdit4();
 	DECLARE_MESSAGE_MAP()
 public:
 	const double GetCount();

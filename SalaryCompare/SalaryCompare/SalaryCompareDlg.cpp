@@ -57,7 +57,7 @@ void CSalaryCompareDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST2, m_listCtrl);
 	DDX_Text(pDX, IDC_SALARY, m_dSalary);
-	DDV_MinMaxDouble(pDX, m_dSalary, 0, 999999999);
+	DDV_MinMaxDouble(pDX, m_dSalary, 0, 9999999999);
 }
 
 BEGIN_MESSAGE_MAP(CSalaryCompareDlg, CDialogEx)
@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CSalaryCompareDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_CALCULATE, &CSalaryCompareDlg::OnBnClickedCalculate)
 	ON_BN_CLICKED(IDC_OTHER, &CSalaryCompareDlg::OnBnClickedOther)
+	ON_EN_CHANGE(IDC_SALARY, &CSalaryCompareDlg::OnEnChangeSalary)
 END_MESSAGE_MAP()
 
 
@@ -157,6 +158,10 @@ BOOL CSalaryCompareDlg::OnInitDialog()
 	m_newMinus[5] = 85920;
 	m_newMinus[6] = 181920;
 	
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_SALARY));
+	if (nullptr != pEdit)
+		pEdit->SetLimitText(10);
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -207,6 +212,79 @@ void CSalaryCompareDlg::OnPaint()
 HCURSOR CSalaryCompareDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CSalaryCompareDlg::OnEnChangeSalary()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_SALARY));
+	if (nullptr == pEdit)
+		return;
+
+	if (0 == pEdit->GetWindowTextLength())
+	{
+		pEdit->SetWindowText(_T("0"));
+		pEdit->SetFocus();
+		pEdit->SetSel(0, -1);
+	}
+}
+
+
+void CSalaryCompareDlg::OnBnClickedOther()
+{
+	COtherItem otherItem;
+	otherItem.DoModal();
+
+	m_dWXYJMoney = otherItem.GetWXYIItemCount();
+	m_dOtherMoney = otherItem.GetOtherItemCount();
+}
+
+// 计算新税法
+void CSalaryCompareDlg::OnBnClickedCalculate()
+{
+	UpdateData();
+
+	double arrOldSalaryCount[13] = { 0 };
+	getForwardSalary(m_dSalary, arrOldSalaryCount);
+	double arrNewSalaryCount[13] = { 0 };
+	getAfterwardSalary(m_dSalary, m_dWXYJMoney, m_dOtherMoney, arrNewSalaryCount);
+
+	for (int i = 0; i != 13; ++i)
+	{
+		TCHAR buf[20];
+		ZeroMemory(buf, 20);
+		swprintf_s(buf, _T("%.2f"), arrOldSalaryCount[i]);
+		m_listCtrl.SetItemText(i, 1, buf);
+
+		ZeroMemory(buf, 20);
+		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i]);
+		m_listCtrl.SetItemText(i, 2, buf);
+
+		ZeroMemory(buf, 20);
+		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i] - arrOldSalaryCount[i]);
+		m_listCtrl.SetItemText(i, 3, buf);
+	}
+
+	m_dWXYJMoney = 0.0;
+	m_dOtherMoney = 0.0;
+}
+
+BOOL CSalaryCompareDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	// 屏蔽两个消息通知码，使得禁止拖动List表头
+	NMHEADER* pNMHeader = (NMHEADER*)lParam;
+	if (((pNMHeader->hdr.code == HDN_BEGINTRACKW) |
+		(pNMHeader->hdr.code == HDN_DIVIDERDBLCLICKW)))
+	{
+		*pResult = TRUE;
+		return TRUE;
+	}
+
+	return CDialogEx::OnNotify(wParam, lParam, pResult);
 }
 
 void CSalaryCompareDlg::getForwardSalary(const double dSalary, double * salaryCount)
@@ -293,55 +371,5 @@ int CSalaryCompareDlg::getLevel(const double dSalary, bool bNew /*= false*/)
 	return nLevel;
 }
 
-void CSalaryCompareDlg::OnBnClickedOther()
-{
-	COtherItem otherItem;
-	otherItem.DoModal();
 
-	m_dWXYJMoney = otherItem.GetWXYIItemCount();
-	m_dOtherMoney = otherItem.GetOtherItemCount();
-}
 
-// 计算新税法
-void CSalaryCompareDlg::OnBnClickedCalculate()
-{
-	UpdateData();
-
-	double arrOldSalaryCount[13] = { 0 };
-	getForwardSalary(m_dSalary, arrOldSalaryCount);
-	double arrNewSalaryCount[13] = { 0 };
-	getAfterwardSalary(m_dSalary, m_dWXYJMoney, m_dOtherMoney, arrNewSalaryCount);
-
-	for (int i = 0; i != 13; ++i)
-	{
-		TCHAR buf[10];
-		ZeroMemory(buf, 10);
-		swprintf_s(buf, _T("%.2f"), arrOldSalaryCount[i]);
-		m_listCtrl.SetItemText(i, 1, buf);
-
-		ZeroMemory(buf, 10);
-		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i]);
-		m_listCtrl.SetItemText(i, 2, buf);
-
-		ZeroMemory(buf, 10);
-		swprintf_s(buf, _T("%.2f"), arrNewSalaryCount[i] - arrOldSalaryCount[i]);
-		m_listCtrl.SetItemText(i, 3, buf);
-	}
-
-	m_dWXYJMoney = 0.0;
-	m_dOtherMoney = 0.0;
-}
-
-BOOL CSalaryCompareDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
-{
-	// 屏蔽两个消息通知码，使得禁止拖动List表头
-	NMHEADER* pNMHeader = (NMHEADER*)lParam;
-	if (((pNMHeader->hdr.code == HDN_BEGINTRACKW) |
-		(pNMHeader->hdr.code == HDN_DIVIDERDBLCLICKW)))
-	{
-		*pResult = TRUE;
-		return TRUE;
-	}
-
-	return CDialogEx::OnNotify(wParam, lParam, pResult);
-}

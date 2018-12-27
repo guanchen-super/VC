@@ -16,7 +16,7 @@ CInsurance::CInsurance(CWnd* pParent /*=NULL*/)
 	, m_nChooseGroup(0)
 	, m_dCount(0)
 	, m_dGJJBase(0)
-	, m_dGJJRate(0)
+	, m_dGJJRate(12)
 	, m_dSBBase(0)
 {
 
@@ -43,6 +43,22 @@ BOOL CInsurance::OnInitDialog()
 
 	m_comboxCity.SetCurSel(0);
 
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT1));
+	if (nullptr != pEdit)
+		pEdit->SetLimitText(10);
+
+	pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT2));
+	if (nullptr != pEdit)
+		pEdit->SetLimitText(10);
+
+	pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT3));
+	if (nullptr != pEdit)
+		pEdit->SetLimitText(2);
+
+	pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT4));
+	if (nullptr != pEdit)
+		pEdit->SetLimitText(10);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
@@ -50,10 +66,30 @@ BOOL CInsurance::OnInitDialog()
 BEGIN_MESSAGE_MAP(CInsurance, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO1, &CInsurance::OnBnClickedRadio1)
 	ON_BN_CLICKED(IDC_RADIO2, &CInsurance::OnBnClickedRadio2)
+	ON_EN_KILLFOCUS(IDC_EDIT3, &CInsurance::OnEnKillfocusEdit3)
+	ON_EN_CHANGE(IDC_EDIT3, &CInsurance::OnEnChangeEdit3)
+	ON_EN_CHANGE(IDC_EDIT1, &CInsurance::OnEnChangeEdit1)
+	ON_EN_CHANGE(IDC_EDIT2, &CInsurance::OnEnChangeEdit2)
+	ON_EN_CHANGE(IDC_EDIT4, &CInsurance::OnEnChangeEdit4)
 END_MESSAGE_MAP()
 
 
 // CInsurance 消息处理程序
+
+void CInsurance::OnOK()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//CDialogEx::OnOK();
+}
+
+void CInsurance::OnCancel()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//CDialogEx::OnCancel();
+}
+
 void CInsurance::OnBnClickedRadio1()
 {
 	UpdateData(TRUE);
@@ -81,6 +117,113 @@ void CInsurance::OnBnClickedRadio2()
 		GetDlgItem(IDC_EDIT4)->EnableWindow(TRUE);
 		m_comboxCity.EnableWindow(TRUE);
 		break;
+	}
+}
+
+void CInsurance::OnEnChangeEdit1()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT1));
+	if (nullptr == pEdit)
+		return;
+
+	if (0 == pEdit->GetWindowTextLength())
+	{
+		pEdit->SetWindowText(_T("0"));
+		pEdit->SetFocus();
+		pEdit->SetSel(0, -1);
+	}
+}
+
+void CInsurance::OnEnChangeEdit2()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT2));
+	if (nullptr == pEdit)
+		return;
+
+	if (0 == pEdit->GetWindowTextLength())
+	{
+		pEdit->SetWindowText(_T("0"));
+		pEdit->SetFocus();
+		pEdit->SetSel(0, -1);
+	}
+}
+
+void CInsurance::OnEnKillfocusEdit3()
+{
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT3));
+	if (nullptr == pEdit)
+		return;
+
+	if (1 == pEdit->GetWindowTextLength())
+	{
+		UpdateData(TRUE);
+		if (m_dGJJRate < 5)
+		{
+			MessageBox(_T("公积金缴存比例应为5% - 12%"));
+			pEdit->SetWindowText(_T("5"));
+			pEdit->SetFocus();
+			pEdit->SetSel(0, -1);
+		}
+	}
+}
+
+void CInsurance::OnEnChangeEdit3()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT3));
+	if (nullptr == pEdit)
+		return;
+
+	if (0 == pEdit->GetWindowTextLength())
+	{
+		pEdit->SetWindowText(_T("12"));
+		pEdit->SetFocus();
+		pEdit->SetSel(0, -1);
+	}
+
+	if (2 == pEdit->GetWindowTextLength())
+	{
+		UpdateData(TRUE);
+		if (m_dGJJRate > 12)
+		{
+			MessageBox(_T("公积金缴存比例应为5% - 12%"));
+			pEdit->SetWindowText(_T("12"));
+			pEdit->SetFocus();
+			pEdit->SetSel(0, -1);
+		}
+	}
+}
+
+void CInsurance::OnEnChangeEdit4()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	CEdit * pEdit = reinterpret_cast<CEdit*>(GetDlgItem(IDC_EDIT4));
+	if (nullptr == pEdit)
+		return;
+
+	if (0 == pEdit->GetWindowTextLength())
+	{
+		pEdit->SetWindowText(_T("0"));
+		pEdit->SetFocus();
+		pEdit->SetSel(0, -1);
 	}
 }
 

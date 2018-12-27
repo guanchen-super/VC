@@ -19,6 +19,10 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	virtual BOOL OnInitDialog();
+	virtual void OnOK();
+	virtual void OnCancel();
+	afx_msg void OnEnKillfocusEdit1();
+	afx_msg void OnEnChangeEdit1();
 	DECLARE_MESSAGE_MAP()
 public:
 	const double GetCount();

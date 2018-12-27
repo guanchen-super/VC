@@ -41,6 +41,20 @@ BOOL CAdultEducation::OnInitDialog()
 				  // 异常: OCX 属性页应返回 FALSE
 }
 
+void CAdultEducation::OnOK()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//CDialogEx::OnOK();
+}
+
+void CAdultEducation::OnCancel()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+
+	//CDialogEx::OnCancel();
+}
+
 void CAdultEducation::OnBnClickedRadio1()
 {
 	UpdateData(TRUE);

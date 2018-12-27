@@ -20,6 +20,8 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	virtual BOOL OnInitDialog();
+	virtual void OnOK();
+	virtual void OnCancel();
 	afx_msg void OnBnClickedRadio1();
 	afx_msg void OnBnClickedRadio3();
 	DECLARE_MESSAGE_MAP()

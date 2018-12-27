@@ -31,6 +31,7 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnEnChangeSalary();
 	afx_msg void OnBnClickedOther();
 	afx_msg void OnBnClickedCalculate();
 	void getForwardSalary(const double dSalary, double * salaryCount);
@@ -48,4 +49,6 @@ private:
 
 	CListCtrl m_listCtrl;
 	double m_dSalary;
+public:
+	
 };
