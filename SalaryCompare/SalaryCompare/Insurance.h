@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // CInsurance 对话框
@@ -18,6 +19,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedRadio1();
 	afx_msg void OnBnClickedRadio2();
 
@@ -26,11 +28,11 @@ public:
 	const double GetCount();
 
 private:
-	CString m_strGJJBase;	// 公积金缴纳基数
-	CString m_strGJJRate;	// 公积金缴纳比例
-	CString m_strSBBase;	// 社保缴纳基数
-
 	int m_nChooseGroup = 0;
 	double m_dMoneyCount = 0.0;
 	double m_dCount;
+	double m_dGJJBase;
+	double m_dGJJRate;
+	double m_dSBBase;
+	CComboBox m_comboxCity;
 };

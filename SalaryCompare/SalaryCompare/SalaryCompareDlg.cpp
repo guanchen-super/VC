@@ -45,14 +45,9 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-
-// CSalaryCompareDlg 对话框
-
-
-
 CSalaryCompareDlg::CSalaryCompareDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SALARYCOMPARE_DIALOG, pParent)
-	, m_strSalary(_T(""))
+	, m_dSalary(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -60,9 +55,9 @@ CSalaryCompareDlg::CSalaryCompareDlg(CWnd* pParent /*=NULL*/)
 void CSalaryCompareDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_SALARY, m_strSalary);
-	DDV_MaxChars(pDX, m_strSalary, 10);
 	DDX_Control(pDX, IDC_LIST2, m_listCtrl);
+	DDX_Text(pDX, IDC_SALARY, m_dSalary);
+	DDV_MinMaxDouble(pDX, m_dSalary, 0, 999999999);
 }
 
 BEGIN_MESSAGE_MAP(CSalaryCompareDlg, CDialogEx)
@@ -107,13 +102,6 @@ BOOL CSalaryCompareDlg::OnInitDialog()
 
 	// 设置表头
 	m_listCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-
-	/*RECT rect;
-	m_listCtrl.GetWindowRect(&rect);
-	m_listCtrl.InsertColumn(0, _T("月份"), LVCFMT_LEFT, 50);
-	m_listCtrl.InsertColumn(1, _T("新税法前"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);
-	m_listCtrl.InsertColumn(2, _T("新税法后"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);
-	m_listCtrl.InsertColumn(3, _T("差额"), LVCFMT_LEFT, (rect.right - rect.left - 100) / 3);*/
 
 	m_listCtrl.InsertColumn(0, _T("月份"), LVCFMT_LEFT, 50);
 	m_listCtrl.InsertColumn(1, _T("新税法前"), LVCFMT_LEFT);
@@ -320,9 +308,9 @@ void CSalaryCompareDlg::OnBnClickedCalculate()
 	UpdateData();
 
 	double arrOldSalaryCount[13] = { 0 };
-	getForwardSalary(_ttoi64(m_strSalary), arrOldSalaryCount);
+	getForwardSalary(m_dSalary, arrOldSalaryCount);
 	double arrNewSalaryCount[13] = { 0 };
-	getAfterwardSalary(_ttoi64(m_strSalary), m_dWXYJMoney, m_dOtherMoney, arrNewSalaryCount);
+	getAfterwardSalary(m_dSalary, m_dWXYJMoney, m_dOtherMoney, arrNewSalaryCount);
 
 	for (int i = 0; i != 13; ++i)
 	{

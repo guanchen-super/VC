@@ -32,7 +32,15 @@
 
 #include <afxcontrolbars.h>     // 功能区和控件条的 MFC 支持
 
+#include <string>
+#include <vector>
 
+extern std::vector<double> g_vecAgeInsurance;
+extern std::vector<double> g_vecLoseJobInsurance;
+extern std::vector<double> g_vecInjuryInsurance;
+extern std::vector<double> g_vecBirthInsurance;
+extern std::vector<double> g_vecTreatmentInsurance;
+extern std::vector<double> g_vecTreatmentInsuranceAdd;
 
 
 

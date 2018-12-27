@@ -34,6 +34,13 @@ CSalaryCompareApp::CSalaryCompareApp()
 
 CSalaryCompareApp theApp;
 
+// 北京,...
+std::vector<double> g_vecAgeInsurance{ 0.08 };
+std::vector<double> g_vecLoseJobInsurance{ 0.002 };
+std::vector<double> g_vecInjuryInsurance{ 0 };
+std::vector<double> g_vecBirthInsurance{ 0 };
+std::vector<double> g_vecTreatmentInsurance{ 0.02 };
+std::vector<double> g_vecTreatmentInsuranceAdd{ 3 };
 
 // CSalaryCompareApp 初始化
 

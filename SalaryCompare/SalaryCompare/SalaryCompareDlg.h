@@ -46,6 +46,6 @@ private:
 	double m_dWXYJMoney = 0.0;
 	double m_dOtherMoney = 0.0;
 
-	CString m_strSalary;
 	CListCtrl m_listCtrl;
+	double m_dSalary;
 };
