@@ -223,14 +223,25 @@ HCURSOR CSalaryCompareDlg::OnQueryDragIcon()
 
 void CSalaryCompareDlg::getForwardSalary(const double dSalary, double * salaryCount)
 {
-	double tempSalary = dSalary - 5000 - m_dWXYJMoney;
-	int nLevel = getLevel(tempSalary);
-	double nTemp = tempSalary * m_taxRate[nLevel] - m_oldMinus[nLevel];
-	
-	for (int i = 0; i != 12; ++i)
+	if (dSalary - m_dWXYJMoney <= 5000)
 	{
-		salaryCount[i] = tempSalary - nTemp + 5000;
-		salaryCount[12] += salaryCount[i];
+		for (int i = 0; i != 12; ++i)
+		{
+			salaryCount[i] = dSalary - m_dWXYJMoney;
+			salaryCount[12] += salaryCount[i];
+		}
+	}
+	else
+	{
+		double tempSalary = dSalary - 5000 - m_dWXYJMoney;
+		int nLevel = getLevel(tempSalary);
+		double nTemp = tempSalary * m_taxRate[nLevel] - m_oldMinus[nLevel];
+
+		for (int i = 0; i != 12; ++i)
+		{
+			salaryCount[i] = tempSalary - nTemp + 5000;
+			salaryCount[12] += salaryCount[i];
+		}
 	}
 }
 
@@ -243,6 +254,9 @@ void CSalaryCompareDlg::getAfterwardSalary(const double dSalary, const double dI
 	for (int i = 1; i != 13; ++i)
 	{
 		nTemp2 = dSalary * i - (5000 + dInsurance + dDiscounts) * i;
+		if (0 > nTemp2)
+			nTemp2 = 0.0;
+
 		int nLevel = getLevel(nTemp2, true);
 		nTemp1 = nTemp2 * m_taxRate[nLevel] - m_newMinus[nLevel] - nTemp0;
 		salaryCount[i - 1] = dSalary - dInsurance - nTemp1;
