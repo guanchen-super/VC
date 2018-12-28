@@ -36,12 +36,19 @@
 #include <vector>
 #include <memory>
 
+#ifdef _UNICODE
+typedef std::wstring String;
+#else
+typedef std::string  String;
+#endif
+
 extern std::vector<double> g_vecAgeInsurance;
 extern std::vector<double> g_vecLoseJobInsurance;
 extern std::vector<double> g_vecInjuryInsurance;
 extern std::vector<double> g_vecBirthInsurance;
 extern std::vector<double> g_vecTreatmentInsurance;
 extern std::vector<double> g_vecTreatmentInsuranceAdd;
+extern std::vector<std::wstring> g_vecTipContent;
 
 
 

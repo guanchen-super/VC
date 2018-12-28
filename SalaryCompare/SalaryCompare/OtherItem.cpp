@@ -46,6 +46,7 @@ const double COtherItem::GetOtherItemCount() const
 BEGIN_MESSAGE_MAP(COtherItem, CDialogEx)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &COtherItem::OnTcnSelchangeTab1)
 	ON_BN_CLICKED(IDOK, &COtherItem::OnBnClickedOk)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -90,21 +91,37 @@ BOOL COtherItem::OnInitDialog()
 	m_spAdultEducation->MoveWindow(&rc);
 	m_spAdultEducation->ShowWindow(SW_HIDE);
 	m_pDlgTab[4] = m_spAdultEducation.get();
+
+	
+	m_tipCtrl.Create(this);
+	m_tipCtrl.SetMaxTipWidth(300);
+	m_tipCtrl.AddTool(GetDlgItem(IDC_STATIC), g_vecTipContent[m_nCurSelTab].c_str());
+	m_tipCtrl.Activate(TRUE);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
 
+
+BOOL COtherItem::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	m_tipCtrl.RelayEvent(pMsg);
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
 void COtherItem::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	m_pDlgTab[m_nCurSelTab]->SetFocus();
-
 	if (m_bChange)
 	{
 		m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_HIDE);
 		m_nCurSelTab = m_tabCtrl.GetCurSel();
 		m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_SHOW);
+		m_tipCtrl.AddTool(GetDlgItem(IDC_STATIC), g_vecTipContent[m_nCurSelTab].c_str());
 	}
+	m_tabCtrl.SetCurSel(m_nCurSelTab);
 	m_bChange = true;
 	*pResult = 0;
 }

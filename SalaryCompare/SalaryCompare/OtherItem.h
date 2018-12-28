@@ -24,6 +24,7 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
 	DECLARE_MESSAGE_MAP()
@@ -40,6 +41,7 @@ private:
 	CDialogEx* m_pDlgTab[5];
 public:
 	CTabCtrl m_tabCtrl;
+	CToolTipCtrl m_tipCtrl;
 	std::shared_ptr<CHouse> m_spHouse = nullptr;
 	std::shared_ptr<CParents> m_spParents = nullptr;
 	std::shared_ptr<CInsurance> m_spInsurance = nullptr;

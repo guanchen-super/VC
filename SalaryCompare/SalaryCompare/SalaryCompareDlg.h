@@ -49,6 +49,4 @@ private:
 
 	CListCtrl m_listCtrl;
 	double m_dSalary;
-public:
-	
 };
