@@ -213,11 +213,11 @@
     <ResourceCompile Include="SalaryCompare.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\SalaryCompare.rc2" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="res\help_16x16.ico" />
     <Image Include="res\SalaryCompare.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\SalaryCompare.rc2" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
