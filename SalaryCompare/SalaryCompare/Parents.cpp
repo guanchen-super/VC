@@ -11,8 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CParents, CDialogEx)
 
-CParents::CParents(CWnd* pParent /*=NULL*/)
+CParents::CParents(bool & bChange, CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_PARENTS, pParent)
+	, m_bChange(bChange)
 	, m_dMoney(0)
 {
 

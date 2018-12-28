@@ -11,8 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CHouse, CDialogEx)
 
-CHouse::CHouse(CWnd* pParent /*=NULL*/)
+CHouse::CHouse(bool & bChange, CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_HOUSE, pParent)
+	, m_bChange(bChange)
 	, m_nChooseGroup(0)
 {
 

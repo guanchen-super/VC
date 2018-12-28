@@ -33,15 +33,16 @@ public:
 	const double GetOtherItemCount() const;
 
 private:
+	bool m_bChange = true;
 	int m_nCurSelTab = 0;
 	double m_dWXYJCount;
 	double m_dOtherCount;
 	CDialogEx* m_pDlgTab[5];
 public:
 	CTabCtrl m_tabCtrl;
-	CHouse m_house;
-	CParents m_parents;
-	CInsurance m_Insurance;
-	CAdultEducation m_adultEducation;
-	CChildrenEducation m_childrenEducation;
+	std::shared_ptr<CHouse> m_spHouse = nullptr;
+	std::shared_ptr<CParents> m_spParents = nullptr;
+	std::shared_ptr<CInsurance> m_spInsurance = nullptr;
+	std::shared_ptr<CAdultEducation> m_spAdultEducation = nullptr;
+	std::shared_ptr<CChildrenEducation> m_spChildrenEducation = nullptr;
 };

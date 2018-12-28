@@ -34,6 +34,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 extern std::vector<double> g_vecAgeInsurance;
 extern std::vector<double> g_vecLoseJobInsurance;

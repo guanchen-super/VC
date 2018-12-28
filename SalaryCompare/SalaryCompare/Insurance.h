@@ -9,7 +9,7 @@ class CInsurance : public CDialogEx
 	DECLARE_DYNAMIC(CInsurance)
 
 public:
-	CInsurance(CWnd* pParent = NULL);   // 标准构造函数
+	CInsurance(bool & bChange, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CInsurance();
 
 // 对话框数据
@@ -34,6 +34,7 @@ public:
 	const double GetCount();
 
 private:
+	bool & m_bChange;
 	int m_nChooseGroup = 0;
 	double m_dMoneyCount = 0.0;
 	double m_dCount;

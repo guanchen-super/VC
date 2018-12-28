@@ -11,8 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CAdultEducation, CDialogEx)
 
-CAdultEducation::CAdultEducation(CWnd* pParent /*=NULL*/)
+CAdultEducation::CAdultEducation(bool & bChange, CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_ADULT_EDUCATION, pParent)
+	, m_bChange(bChange)
 	, m_nChooseGroup(0)
 {
 

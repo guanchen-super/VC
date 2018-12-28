@@ -9,7 +9,7 @@ class CAdultEducation : public CDialogEx
 	DECLARE_DYNAMIC(CAdultEducation)
 
 public:
-	CAdultEducation(CWnd* pParent = NULL);   // 标准构造函数
+	CAdultEducation(bool & bChange, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CAdultEducation();
 
 // 对话框数据
@@ -29,6 +29,7 @@ public:
 	const double GetCount();
 
 private:
+	bool & m_bChange;
 	CComboBox m_comboxXL;
 	CComboBox m_comboxZY;	
 	int m_nChooseGroup;

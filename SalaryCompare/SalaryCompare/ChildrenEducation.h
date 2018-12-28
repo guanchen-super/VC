@@ -9,7 +9,7 @@ class CChildrenEducation : public CDialogEx
 	DECLARE_DYNAMIC(CChildrenEducation)
 
 public:
-	CChildrenEducation(CWnd* pParent = NULL);   // 标准构造函数
+	CChildrenEducation(bool & bChange, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CChildrenEducation();
 
 // 对话框数据
@@ -27,6 +27,7 @@ public:
 	const int GetCount();
 
 private:
+	bool & m_bChange;
 	CComboBox m_comboxChildren;
 	CComboBox m_comboxMoney;
 };

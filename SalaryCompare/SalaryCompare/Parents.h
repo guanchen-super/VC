@@ -8,7 +8,7 @@ class CParents : public CDialogEx
 	DECLARE_DYNAMIC(CParents)
 
 public:
-	CParents(CWnd* pParent = NULL);   // 标准构造函数
+	CParents(bool & bChange, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CParents();
 
 // 对话框数据
@@ -27,6 +27,7 @@ protected:
 public:
 	const double GetCount();
 
-private:	
+private:
+	bool & m_bChange;
 	double m_dMoney;
 };

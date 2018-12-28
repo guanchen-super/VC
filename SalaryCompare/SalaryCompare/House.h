@@ -9,7 +9,7 @@ class CHouse : public CDialogEx
 	DECLARE_DYNAMIC(CHouse)
 
 public:
-	CHouse(CWnd* pParent = NULL);   // 标准构造函数
+	CHouse(bool & bChange, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CHouse();
 
 // 对话框数据
@@ -30,6 +30,7 @@ public:
 	const int GetCount();
 
 private:
+	bool & m_bChange;
 	int m_nMoneyCount;
 	int m_nChooseGroup;
 	CComboBox m_comboxRent;

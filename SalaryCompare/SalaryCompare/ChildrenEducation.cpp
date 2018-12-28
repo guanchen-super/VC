@@ -11,8 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CChildrenEducation, CDialogEx)
 
-CChildrenEducation::CChildrenEducation(CWnd* pParent /*=NULL*/)
+CChildrenEducation::CChildrenEducation(bool & bChange, CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_CHILDREN_EDUCATION, pParent)
+	, m_bChange(bChange)
 {
 
 }

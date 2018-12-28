@@ -13,6 +13,11 @@ IMPLEMENT_DYNAMIC(COtherItem, CDialogEx)
 
 COtherItem::COtherItem(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_OTHER_ITEM, pParent)
+	, m_spHouse(std::make_shared<CHouse>(m_bChange))
+	, m_spParents(std::make_shared<CParents>(m_bChange))
+	, m_spInsurance(std::make_shared<CInsurance>(m_bChange))
+	, m_spAdultEducation(std::make_shared<CAdultEducation>(m_bChange))
+	, m_spChildrenEducation(std::make_shared<CChildrenEducation>(m_bChange))
 {
 
 }
@@ -61,30 +66,30 @@ BOOL COtherItem::OnInitDialog()
 	m_tabCtrl.GetClientRect(&rc);
 	rc.top += 20;
 
-	m_Insurance.Create(IDD_INSURANCE, &m_tabCtrl);
-	m_Insurance.MoveWindow(&rc);
-	m_Insurance.ShowWindow(SW_SHOW);
-	m_pDlgTab[0] = &m_Insurance;
+	m_spInsurance->Create(IDD_INSURANCE, &m_tabCtrl);
+	m_spInsurance->MoveWindow(&rc);
+	m_spInsurance->ShowWindow(SW_SHOW);
+	m_pDlgTab[0] = m_spInsurance.get();
 
-	m_childrenEducation.Create(IDD_CHILDREN_EDUCATION, &m_tabCtrl);
-	m_childrenEducation.MoveWindow(&rc);
-	m_childrenEducation.ShowWindow(SW_HIDE);
-	m_pDlgTab[1] = &m_childrenEducation;
+	m_spChildrenEducation->Create(IDD_CHILDREN_EDUCATION, &m_tabCtrl);
+	m_spChildrenEducation->MoveWindow(&rc);
+	m_spChildrenEducation->ShowWindow(SW_HIDE);
+	m_pDlgTab[1] = m_spChildrenEducation.get();
 
-	m_house.Create(IDD_HOUSE, &m_tabCtrl);
-	m_house.MoveWindow(&rc);
-	m_house.ShowWindow(SW_HIDE);
-	m_pDlgTab[2] = &m_house;
+	m_spHouse->Create(IDD_HOUSE, &m_tabCtrl);
+	m_spHouse->MoveWindow(&rc);
+	m_spHouse->ShowWindow(SW_HIDE);
+	m_pDlgTab[2] = m_spHouse.get();
 
-	m_parents.Create(IDD_PARENTS, &m_tabCtrl);
-	m_parents.MoveWindow(&rc);
-	m_parents.ShowWindow(SW_HIDE);
-	m_pDlgTab[3] = &m_parents;
+	m_spParents->Create(IDD_PARENTS, &m_tabCtrl);
+	m_spParents->MoveWindow(&rc);
+	m_spParents->ShowWindow(SW_HIDE);
+	m_pDlgTab[3] = m_spParents.get();
 
-	m_adultEducation.Create(IDD_ADULT_EDUCATION, &m_tabCtrl);
-	m_adultEducation.MoveWindow(&rc);
-	m_adultEducation.ShowWindow(SW_HIDE);
-	m_pDlgTab[4] = &m_adultEducation;
+	m_spAdultEducation->Create(IDD_ADULT_EDUCATION, &m_tabCtrl);
+	m_spAdultEducation->MoveWindow(&rc);
+	m_spAdultEducation->ShowWindow(SW_HIDE);
+	m_pDlgTab[4] = m_spAdultEducation.get();
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -92,21 +97,26 @@ BOOL COtherItem::OnInitDialog()
 
 void COtherItem::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_HIDE);
-	m_nCurSelTab = m_tabCtrl.GetCurSel();
-	m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_SHOW);
+	m_pDlgTab[m_nCurSelTab]->SetFocus();
 
+	if (m_bChange)
+	{
+		m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_HIDE);
+		m_nCurSelTab = m_tabCtrl.GetCurSel();
+		m_pDlgTab[m_nCurSelTab]->ShowWindow(SW_SHOW);
+	}
+	m_bChange = true;
 	*pResult = 0;
 }
 
 
 void COtherItem::OnBnClickedOk()
 {
-	m_dWXYJCount = m_Insurance.GetCount();
-	m_dOtherCount = m_childrenEducation.GetCount();
-	m_dOtherCount += m_house.GetCount();
-	m_dOtherCount += m_parents.GetCount();
-	m_dOtherCount += m_adultEducation.GetCount();
+	m_dWXYJCount = m_spInsurance->GetCount();
+	m_dOtherCount = m_spChildrenEducation->GetCount();
+	m_dOtherCount += m_spHouse->GetCount();
+	m_dOtherCount += m_spParents->GetCount();
+	m_dOtherCount += m_spAdultEducation->GetCount();
 
 	CDialogEx::OnOK();
 }

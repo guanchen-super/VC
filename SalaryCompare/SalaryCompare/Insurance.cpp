@@ -11,8 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CInsurance, CDialogEx)
 
-CInsurance::CInsurance(CWnd* pParent /*=NULL*/)
+CInsurance::CInsurance(bool & bChange, CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_INSURANCE, pParent)
+	, m_bChange(bChange)
 	, m_nChooseGroup(0)
 	, m_dCount(0)
 	, m_dGJJBase(0)
@@ -169,6 +170,7 @@ void CInsurance::OnEnKillfocusEdit3()
 		UpdateData(TRUE);
 		if (m_dGJJRate < 5)
 		{
+			m_bChange = false;
 			MessageBox(_T("公积金缴存比例应为5% - 12%"));
 			pEdit->SetWindowText(_T("5"));
 			pEdit->SetFocus();
@@ -238,20 +240,23 @@ const double CInsurance::GetCount()
 	{	
 		int nIndex = m_comboxCity.GetCurSel();
 
-		// 养老保险
-		m_dMoneyCount = m_dSBBase * g_vecAgeInsurance[nIndex];
+		if (!(m_dSBBase > -0.0000001 && m_dSBBase < 0.0000001))
+		{
+			// 养老保险
+			m_dMoneyCount = m_dSBBase * g_vecAgeInsurance[nIndex];
 
-		// 失业保险
-		m_dMoneyCount += m_dSBBase * g_vecLoseJobInsurance[nIndex];
+			// 失业保险
+			m_dMoneyCount += m_dSBBase * g_vecLoseJobInsurance[nIndex];
 
-		// 工伤保险
-		m_dMoneyCount += m_dSBBase * g_vecInjuryInsurance[nIndex];
+			// 工伤保险
+			m_dMoneyCount += m_dSBBase * g_vecInjuryInsurance[nIndex];
 
-		// 生育保险
-		m_dMoneyCount += m_dSBBase * g_vecBirthInsurance[nIndex];
+			// 生育保险
+			m_dMoneyCount += m_dSBBase * g_vecBirthInsurance[nIndex];
 
-		// 医疗保险 + 医疗附加额
-		m_dMoneyCount += m_dSBBase * g_vecTreatmentInsurance[nIndex] + g_vecTreatmentInsuranceAdd[nIndex];
+			// 医疗保险 + 医疗附加额
+			m_dMoneyCount += m_dSBBase * g_vecTreatmentInsurance[nIndex] + g_vecTreatmentInsuranceAdd[nIndex];
+		}
 
 		// 公积金
 		m_dMoneyCount += m_dGJJBase * m_dGJJRate / 100.0;
