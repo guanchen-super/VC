@@ -161,13 +161,23 @@ void ComputingSolution()
 	std::cout << "非套餐折扣率为：" << g_fNormalRebate << std::endl;
 	std::cout << "需要定制衣柜（或橱柜）的总面积为:" << g_fClosetArea << "平米" << std::endl;
 
+	int nSolution = 0; // 0:使用套餐 1.使用非套餐 2.混合使用
+
 	if (g_bCombo)
 	{
 		// 计算需要几个套餐
 		int nCount = (g_fClosetArea / g_fComboArea);
 		if (nCount > 0)
 		{
-			
+			/* 全部使用套餐 */
+			if (nCount * g_fComboArea >= g_fClosetArea)
+			{
+
+			}
+
+			/* 使用套餐但是超出面积部分不使用套餐 */
+
+			/* 对比以及推荐 */
 		}
 		else
 		{
