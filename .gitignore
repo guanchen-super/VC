@@ -18,3 +18,10 @@
 /AutoSolution/.vs/AutoSolution/v15
 /AutoSolution/Debug
 /AutoSolution/Release
+/AutoSolution/optimal_solution.txt
+/GLogTests/.vs/GLogTests/v16
+/GLogTests/x64/Debug
+*.user
+/SalaryCompare/.vs/SalaryCompare/v16
+/SalaryCompare/SalaryCompare/x64/Debug
+/SalaryCompare/x64/Debug
